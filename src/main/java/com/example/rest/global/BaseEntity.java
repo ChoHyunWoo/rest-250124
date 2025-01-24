@@ -1,10 +1,9 @@
-package com.example.rest.domain.post.post.global;
+package com.example.rest.global;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.*;
-
 @MappedSuperclass
 @AllArgsConstructor
 @NoArgsConstructor
