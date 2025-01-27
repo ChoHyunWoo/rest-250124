@@ -37,12 +37,13 @@ public class PostService {
     public long count() {
         return postRepository.count();
     }
+
     public void delete(Post post) {
         postRepository.delete(post);
     }
 
     @Transactional
-    public void modify(Post post , String title, String content) {
+    public void modify(Post post, String title, String content) {
         post.setTitle(title);
         post.setContent(content);
     }
