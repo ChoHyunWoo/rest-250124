@@ -21,7 +21,9 @@ public class ApiV1PostController {
 
     @GetMapping
     public List<PostDto> getItems() {
+
         List<Post> posts = postService.getItems();
+
         return posts.stream()
                 .map(PostDto::new)
                 .toList();
@@ -36,7 +38,6 @@ public class ApiV1PostController {
 
         return postDto;
     }
-
 
     @DeleteMapping("/{id}")
     public RsData delete(@PathVariable long id) {
@@ -71,12 +72,12 @@ public class ApiV1PostController {
 
     @PostMapping
     public RsData write(@RequestBody @Valid WriteReqBody body) {
-        postService.write(body.title(), body.content());
+        Post post = postService.write(body.title(), body.content());
 
         return new RsData(
                 "200-1",
-                "글 작성이 완료되었습니다."
+                "글 작성이 완료되었습니다.",
+                post.getId()
         );
     }
-
 }
