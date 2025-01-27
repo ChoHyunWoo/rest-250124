@@ -8,12 +8,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -86,16 +85,29 @@ public class ApiV1PostController {
     }
 
     @PostMapping
-    public RsData<WriteResBody> write(@RequestBody @Valid WriteReqBody body) {
+    public ResponseEntity<RsData<WriteResBody>> write(@RequestBody @Valid WriteReqBody body) {
         Post post = postService.write(body.title(), body.content());
 
-        return new RsData<>(
-                "200-1",
-                "글 작성이 완료되었습니다.",
-                new WriteResBody(
-                        post.getId(),
-                        postService.count()
-                )
-        );
+        //헤더(HEADER)
+
+
+        //바디(Body)
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new RsData<>(
+                                "200-1",
+                                "글 작성이 완료되었습니다.",
+                                new WriteResBody(
+                                        post.getId(),
+                                        postService.count()
+                                )
+                        )
+                );
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "test";
     }
 }
