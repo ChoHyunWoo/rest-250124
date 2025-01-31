@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -40,7 +41,7 @@ public class ApiV1PostController {
     @GetMapping("{id}")
     public RsData<PostDto> getItem(@PathVariable long id) {
 
-        Post post = postService.getItem(id).get();
+          Post post = postService.getItem(id).get();
 
         return new RsData<>(
                 "200-1",
@@ -55,7 +56,7 @@ public class ApiV1PostController {
         postService.delete(post);
 
         return new RsData<>(
-                "200-1",
+                "204-1",
                 "%d번 글 삭제가 완료되었습니다.".formatted(id)
         );
     }
@@ -69,7 +70,6 @@ public class ApiV1PostController {
 
         Post post = postService.getItem(id).get();
         postService.modify(post, body.title(), body.content());
-
         return new RsData<>(
                 "200-1",
                 "%d번 글 수정이 완료되었습니다.".formatted(id),
@@ -85,29 +85,22 @@ public class ApiV1PostController {
     }
 
     @PostMapping
-    public ResponseEntity<RsData<WriteResBody>> write(@RequestBody @Valid WriteReqBody body) {
+    public RsData<WriteResBody> write(@RequestBody @Valid WriteReqBody body) {
         Post post = postService.write(body.title(), body.content());
 
-        //헤더(HEADER)
-
-
-        //바디(Body)
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(new RsData<>(
-                                "200-1",
-                                "글 작성이 완료되었습니다.",
-                                new WriteResBody(
-                                        post.getId(),
-                                        postService.count()
-                                )
-                        )
-                );
+        return new RsData<>(
+                "200-1",
+                "글 작성이 완료되었습니다.",
+                new WriteResBody(
+                        post.getId(),
+                        postService.count()
+                )
+        );
     }
 
     @GetMapping("/test")
     public String test() {
         return "test";
     }
+
 }
